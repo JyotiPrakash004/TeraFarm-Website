@@ -60,7 +60,14 @@ function FeaturesPage() {
           <ul className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:gap-1 lg:overflow-visible">
             {sections.map((s, i) => (
               <li key={s.id} className="shrink-0">
-                <a href={`#${s.id}`} className={`block rounded-lg border-l-2 px-3 py-2 text-sm transition ${active === s.id ? "border-leaf bg-secondary font-semibold text-primary" : "border-transparent text-muted-foreground hover:text-primary"}`}>
+                <a
+                  href={`#${s.id}`}
+                  className={`block rounded-lg border-l-2 px-3 py-2 text-sm transition-all duration-200 ${
+                    active === s.id
+                      ? "border-leaf bg-secondary font-semibold text-primary translate-x-1"
+                      : "border-transparent text-muted-foreground hover:text-primary hover:bg-secondary/40 hover:translate-x-0.5"
+                  }`}
+                >
                   {i + 1}. {s.t}
                 </a>
               </li>
@@ -69,16 +76,22 @@ function FeaturesPage() {
         </nav>
         <div className="space-y-8">
           {sections.map(({ id, icon: I, t, s, body, steps, note }, i) => (
-            <article id={id} key={id} className="scroll-mt-24 rounded-3xl border border-border bg-card p-7 sm:p-9">
+            <article
+              id={id}
+              key={id}
+              className="group scroll-mt-24 rounded-3xl border border-border bg-card p-7 transition-all duration-200 hover:border-leaf/30 hover:shadow-soft sm:p-9"
+            >
               <div className="flex flex-wrap items-center gap-3">
-                <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-primary"><I className="h-5 w-5" /></div>
-                <h2 className="text-xl font-bold sm:text-2xl">{i + 1}. {t}</h2>
+                <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-primary transition-all duration-200 group-hover:bg-leaf/20 group-hover:-translate-y-0.5">
+                  <I className="h-5 w-5" />
+                </div>
+                <h2 className="text-xl font-bold sm:text-2xl transition-colors duration-200 group-hover:text-primary">{i + 1}. {t}</h2>
                 <StatusBadge s={s} />
               </div>
               <p className="mt-4 leading-relaxed text-muted-foreground">{body}</p>
               <ol className="mt-6 grid gap-3 sm:grid-cols-2">
                 {steps.map((st, j) => (
-                  <li key={st} className="flex items-start gap-3 rounded-xl bg-background p-3 text-sm">
+                  <li key={st} className="flex items-start gap-3 rounded-xl bg-background p-3 text-sm transition-colors duration-150 hover:bg-secondary/40">
                     <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{j + 1}</span>
                     {st}
                   </li>

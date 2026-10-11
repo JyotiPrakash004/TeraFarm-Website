@@ -6,6 +6,8 @@ import {
 import plant from "@/assets/hero-plant.jpg";
 import { appLinks, isValidUrl, productionReady } from "@/config/appLinks";
 import { btn, DemoDownloadButton, ExternalLink, Footer, Header } from "@/components/site";
+import { InteractiveHeroGrid } from "@/components/hero-grid";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,11 +64,14 @@ function Phone() {
 }
 
 function HeroButton({ icon, label, main, onClick, href }: { icon: React.ReactNode; label: string; main: string; onClick?: () => void; href?: string }) {
-  const cls = "flex items-center gap-3 rounded-2xl border border-foreground/80 bg-card px-4 py-2.5 text-left shadow-soft transition hover:-translate-y-0.5";
+  const cls = "group flex items-center gap-3 rounded-2xl border border-foreground/80 bg-card px-4 py-2.5 text-left shadow-soft transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md hover:border-primary/80 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
   const inner = (
     <>
-      {icon}
-      <span><span className="block text-[10px] font-medium tracking-wide">{label}</span><span className="block text-base font-bold leading-tight">{main}</span></span>
+      <span className="transition-transform duration-200 ease-out group-hover:scale-105">{icon}</span>
+      <span>
+        <span className="block text-[10px] font-medium tracking-wide text-foreground/80">{label}</span>
+        <span className="block text-base font-bold leading-tight text-foreground transition-colors duration-200 group-hover:text-primary">{main}</span>
+      </span>
     </>
   );
   if (onClick) return <button onClick={onClick} className={cls}>{inner}</button>;
@@ -79,7 +84,7 @@ function Hero() {
   const right = <HeroButton icon={<FolderOpen className="h-7 w-7 text-primary" />} label="EXPLORE THE PROJECT" main="View Demo on Drive" href={appLinks.demoDriveUrl} />;
   return (
     <section className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 bg-field-pattern" />
+      <InteractiveHeroGrid />
       <div className="relative mx-auto max-w-6xl px-5 pt-16 text-center animate-rise">
         <span className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-1.5 text-sm font-medium text-primary">
           <Sparkles className="h-4 w-4" /> 🌱 Meet TeraFarm — Farming, Smarter
@@ -115,19 +120,29 @@ const features = [
 ];
 
 function Features() {
+  const { ref, isVisible } = useScrollReveal<HTMLElement>();
   return (
-    <section className="mx-auto max-w-6xl px-5 py-24">
+    <section
+      ref={ref}
+      className={`mx-auto max-w-6xl px-5 py-24 transition-all duration-700 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+      }`}
+    >
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Everything Your Farm Needs. In One Place.</h2>
         <p className="mt-4 text-muted-foreground">Explore the tools designed to make farming more informed, connected, and accessible.</p>
       </div>
       <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {features.map(({ icon: I, t, d }) => (
-          <article key={t} className="group rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:shadow-soft">
-            <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
-              <I className="h-5 w-5" />
+        {features.map(({ icon: I, t, d }, idx) => (
+          <article
+            key={t}
+            style={{ transitionDelay: `${idx * 60}ms` }}
+            className="group rounded-2xl border border-border bg-card p-6 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-soft hover:border-leaf/40"
+          >
+            <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-primary transition-all duration-200 ease-out group-hover:bg-leaf/20 group-hover:-translate-y-0.5">
+              <I className="h-5 w-5 transition-transform duration-200 ease-out group-hover:scale-105" />
             </div>
-            <h3 className="mt-5 font-semibold">{t}</h3>
+            <h3 className="mt-5 font-semibold transition-colors duration-200 group-hover:text-primary">{t}</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{d}</p>
           </article>
         ))}
@@ -142,28 +157,37 @@ function Features() {
 
 function Downloads() {
   const ready = productionReady();
+  const { ref, isVisible } = useScrollReveal<HTMLElement>();
   return (
-    <section id="downloads" className="scroll-mt-20 bg-secondary/50 py-24">
+    <section
+      id="downloads"
+      ref={ref}
+      className={`scroll-mt-20 bg-secondary/50 py-24 transition-all duration-700 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+      }`}
+    >
       <div className="mx-auto max-w-6xl px-5">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Get Your Hands on TeraFarm</h2>
           <p className="mt-4 text-muted-foreground">Explore the current demo and stay tuned for the next evolution of smarter farming.</p>
         </div>
         <div className="mt-14 grid gap-6 md:grid-cols-2">
-          <article className="flex flex-col rounded-3xl border border-leaf/40 bg-card p-8 shadow-soft">
+          <article className="group flex flex-col rounded-3xl border border-leaf/40 bg-card p-8 shadow-soft transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-leaf/60">
             <div className="flex items-center justify-between">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary text-leaf"><Smartphone className="h-6 w-6" /></div>
+              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary text-leaf transition-all duration-200 ease-out group-hover:bg-leaf/20 group-hover:-translate-y-0.5">
+                <Smartphone className="h-6 w-6" />
+              </div>
               <span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold tracking-wide text-primary">AVAILABLE NOW</span>
             </div>
-            <h3 className="mt-6 text-2xl font-bold">TeraFarm Demo</h3>
+            <h3 className="mt-6 text-2xl font-bold transition-colors duration-200 group-hover:text-primary">TeraFarm Demo</h3>
             <p className="text-sm text-muted-foreground">Explore the early experience. · {appLinks.demoVersion}</p>
             <p className="mt-4 flex-1 text-sm leading-relaxed">This is the demo application. It's still a work in progress, but it gives you a glimpse of the features, ideas, and upcoming functionality we're building for TeraFarm.</p>
             <div className="mt-6 space-y-3">
               <DemoDownloadButton />
-              <ExternalLink href={appLinks.demoDriveUrl} className="block text-sm font-medium text-primary underline-offset-4 hover:underline">View demo files on Google Drive ↗</ExternalLink>
+              <ExternalLink href={appLinks.demoDriveUrl} className="inline-block text-sm font-medium text-primary underline-offset-4 hover:underline transition-colors duration-200">View demo files on Google Drive ↗</ExternalLink>
             </div>
           </article>
-          <article className="flex flex-col rounded-3xl border border-primary/20 bg-gradient-primary p-8 text-primary-foreground">
+          <article className="flex flex-col rounded-3xl border border-primary/20 bg-gradient-primary p-8 text-primary-foreground transition-all duration-200 ease-out hover:border-primary/40 hover:shadow-soft">
             <div className="flex items-center justify-between">
               <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary-foreground/10">{ready ? <Download className="h-6 w-6" /> : <Lock className="h-6 w-6" />}</div>
               <span className="rounded-full bg-primary-foreground/15 px-3 py-1 text-xs font-bold tracking-wide">{ready ? "AVAILABLE NOW" : "IN DEVELOPMENT"}</span>
@@ -189,29 +213,42 @@ function Downloads() {
 }
 
 function Community() {
+  const { ref, isVisible } = useScrollReveal<HTMLElement>();
   return (
-    <section id="community" className="scroll-mt-20 mx-auto max-w-6xl px-5 py-24">
+    <section
+      id="community"
+      ref={ref}
+      className={`scroll-mt-20 mx-auto max-w-6xl px-5 py-24 transition-all duration-700 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+      }`}
+    >
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Follow the Journey. Grow With Us.</h2>
         <p className="mt-4 text-muted-foreground">Explore the project, discover the demo, and follow our journey as TeraFarm grows.</p>
       </div>
       <div className="mt-14 grid items-stretch gap-6 lg:grid-cols-3">
-        <article className="flex flex-col rounded-3xl border border-border bg-card p-7">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-chart-4 via-destructive to-primary text-primary-foreground"><Instagram className="h-6 w-6" /></div>
-          <h3 className="mt-5 text-xl font-bold">Follow TeraFarm</h3>
+        <article className="group flex flex-col rounded-3xl border border-border bg-card p-7 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-soft hover:border-leaf/30">
+          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-chart-4 via-destructive to-primary text-primary-foreground transition-all duration-200 ease-out group-hover:-translate-y-0.5 group-hover:shadow-sm">
+            <Instagram className="h-6 w-6" />
+          </div>
+          <h3 className="mt-5 text-xl font-bold transition-colors duration-200 group-hover:text-primary">Follow TeraFarm</h3>
           <p className="mt-2 flex-1 text-sm text-muted-foreground">Get a closer look at our progress, new ideas, feature previews, and the journey behind building TeraFarm.</p>
           <ExternalLink href={appLinks.instagramUrl} className={`${btn.outline} mt-6`} fallback="Instagram link coming soon">Visit Instagram ↗</ExternalLink>
         </article>
-        <article className="flex flex-col rounded-3xl border-2 border-leaf/50 bg-card p-7 shadow-soft lg:-translate-y-3">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary text-primary"><FolderOpen className="h-6 w-6" /></div>
-          <h3 className="mt-5 text-xl font-bold">Explore the Demo</h3>
+        <article className="group flex flex-col rounded-3xl border-2 border-leaf/50 bg-card p-7 shadow-soft lg:-translate-y-3 transition-all duration-200 ease-out hover:shadow-lg hover:border-leaf">
+          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary text-primary transition-all duration-200 ease-out group-hover:bg-leaf/20 group-hover:-translate-y-0.5">
+            <FolderOpen className="h-6 w-6" />
+          </div>
+          <h3 className="mt-5 text-xl font-bold transition-colors duration-200 group-hover:text-primary">Explore the Demo</h3>
           <p className="mt-2 text-sm text-muted-foreground">Curious about what we're building? Take a closer look at the demo resources and explore the project for yourself.</p>
-          <p className="mt-4 flex-1 rounded-xl bg-secondary p-4 text-sm font-medium text-primary">“A little peek into a bigger vision. 🌱 Open the Drive, explore the demo, and see where smarter farming begins.”</p>
+          <p className="mt-4 flex-1 rounded-xl bg-secondary p-4 text-sm font-medium text-primary transition-colors duration-200 group-hover:bg-secondary/80">“A little peek into a bigger vision. 🌱 Open the Drive, explore the demo, and see where smarter farming begins.”</p>
           <ExternalLink href={appLinks.demoDriveUrl} className={`${btn.primary} mt-6`} fallback="Drive link coming soon">Explore Demo on Drive ↗</ExternalLink>
         </article>
-        <article className="flex flex-col rounded-3xl border border-border bg-card p-7">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-earth text-primary"><Sprout className="h-6 w-6" /></div>
-          <h3 className="mt-5 text-xl font-bold">Built With Purpose</h3>
+        <article className="group flex flex-col rounded-3xl border border-border bg-card p-7 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-soft hover:border-leaf/30">
+          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-earth text-primary transition-all duration-200 ease-out group-hover:bg-leaf/20 group-hover:-translate-y-0.5">
+            <Sprout className="h-6 w-6" />
+          </div>
+          <h3 className="mt-5 text-xl font-bold transition-colors duration-200 group-hover:text-primary">Built With Purpose</h3>
           <p className="mt-2 flex-1 text-sm text-muted-foreground">TeraFarm is an evolving agriculture technology project focused on making farming tools, information, and collaboration more accessible.</p>
           {isValidUrl(appLinks.projectUrl) ? (
             <ExternalLink href={appLinks.projectUrl} className={`${btn.outline} mt-6`}>Discover TeraFarm ↗</ExternalLink>
@@ -223,3 +260,4 @@ function Community() {
     </section>
   );
 }
+

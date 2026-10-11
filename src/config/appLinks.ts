@@ -2,7 +2,7 @@
 // Leave a value as "" until you have the real URL — buttons stay disabled instead of breaking.
 // Google Drive: set the folder/file sharing to "Anyone with the link can view", or visitors can't open it.
 export const appLinks = {
-  demoApkUrl: "/downloads/app-debug.apk",
+  demoApkUrl: "https://drive.google.com/drive/folders/1DoXTELATgeVY802-wcKBwehvF2_TcyyN?usp=sharing",
   demoDriveUrl: "https://drive.google.com/drive/folders/1maSe8wfqOQtVQfGBZMHshLlnVGvs532p",
   demoVersion: "v0.1 Demo",
   productionApkUrl: "",
