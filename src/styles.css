@@ -118,11 +118,38 @@
     transform: translateY(0);
   }
 }
+@keyframes plant-emerge {
+  0% {
+    transform: translateY(28px) scale(0.95);
+    opacity: 0.85;
+  }
+  65% {
+    transform: translateY(-2px) scale(1.01);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes plant-breathe {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(0.6deg);
+  }
+}
 
 @utility animate-float { animation: float 6s ease-in-out infinite; }
 @utility animate-rise { animation: rise 0.8s ease-out both; }
 @utility animate-hero-ripple { animation: hero-ripple 0.75s cubic-bezier(0.1, 0.4, 0.2, 1) forwards; }
 @utility animate-reveal-up { animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@utility animate-plant-emerge {
+  animation:
+    plant-emerge 1.4s cubic-bezier(0.16, 1, 0.3, 1) both,
+    plant-breathe 6s ease-in-out infinite 1.4s;
+  transform-origin: bottom center;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

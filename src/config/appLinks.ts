@@ -5,9 +5,10 @@ export const appLinks = {
   demoApkUrl: "https://drive.google.com/drive/folders/1DoXTELATgeVY802-wcKBwehvF2_TcyyN?usp=sharing",
   demoDriveUrl: "https://drive.google.com/drive/folders/1maSe8wfqOQtVQfGBZMHshLlnVGvs532p",
   demoVersion: "v0.1 Demo",
-  productionApkUrl: "",
-  productionAvailable: false,
+  productionApkUrl: "https://drive.google.com/drive/folders/1AxagdEYfOar9KnsXgxb2IgVnOACnXKmu?usp=sharing",
+  productionAvailable: true,
   productionVersion: "v1.0",
+  finalDemoUrl: "https://drive.google.com/drive/folders/17u4PQcUod4k7rluhNDxfW8Co4W-EsRQb?usp=sharing",
   instagramUrl: "https://www.instagram.com/terafarm01?xtok=cjBlZ3dyaXZ0MnI3",
   projectUrl: "",
 };

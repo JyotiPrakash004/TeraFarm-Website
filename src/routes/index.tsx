@@ -4,6 +4,7 @@ import {
   LayoutDashboard, Leaf, Lock, Smartphone, Sparkles, Sprout, TrendingUp,
 } from "lucide-react";
 import plant from "@/assets/hero-plant.jpg";
+import plantPopout from "@/assets/hero-plant-popout.png";
 import { appLinks, isValidUrl, productionReady } from "@/config/appLinks";
 import { btn, DemoDownloadButton, ExternalLink, Footer, Header } from "@/components/site";
 import { InteractiveHeroGrid } from "@/components/hero-grid";
@@ -41,22 +42,57 @@ function Home() {
 function Phone() {
   return (
     <div className="relative mx-auto w-[260px] animate-float sm:w-[300px]">
-      <div className="relative aspect-[9/19] overflow-hidden rounded-[2.75rem] border-[10px] border-foreground/90 bg-deep shadow-phone">
-        <img src={plant} alt="Healthy young green seedling growing in rich soil" width={768} height={1536} className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute left-1/2 top-2 h-6 w-24 -translate-x-1/2 rounded-full bg-foreground" />
-        <div className="absolute inset-x-0 top-10 flex items-center justify-between px-4 text-deep-foreground">
-          <span className="flex items-center gap-1 text-xs font-bold"><Sprout className="h-3.5 w-3.5" /> TeraFarm</span>
-          <span className="rounded-full bg-deep/60 px-2 py-0.5 text-[10px] backdrop-blur">Crop health · Good</span>
+      {/* 1. Phone Frame & Body */}
+      <div className="relative aspect-[9/19] rounded-[2.75rem] border-[10px] border-foreground/90 bg-deep shadow-phone">
+        {/* Screen container: strictly clipped to phone display with rounded corners */}
+        <div className="absolute inset-0 overflow-hidden rounded-[2.1rem]">
+          {/* Base plant image (soil, background ambiance, lower plant) */}
+          <img
+            src={plant}
+            alt="Healthy young green seedling growing in rich soil"
+            width={768}
+            height={1536}
+            className="absolute inset-x-0 -top-16 sm:-top-20 h-[calc(100%+4rem)] sm:h-[calc(100%+5rem)] w-full object-cover"
+          />
+
+          {/* Dynamic Island */}
+          <div className="absolute left-1/2 top-2 h-6 w-24 -translate-x-1/2 rounded-full bg-foreground z-10" />
+
+          {/* Top Status Bar */}
+          <div className="absolute inset-x-0 top-10 flex items-center justify-between px-4 text-deep-foreground z-10">
+            <span className="flex items-center gap-1 text-xs font-bold">
+              <Sprout className="h-3.5 w-3.5" /> TeraFarm
+            </span>
+            <span className="rounded-full bg-deep/60 px-2 py-0.5 text-[10px] backdrop-blur">
+              Crop health · Good
+            </span>
+          </div>
+
+          {/* Bottom Farm Insights Card */}
+          <div className="absolute inset-x-3 bottom-4 space-y-2 rounded-2xl bg-deep/70 p-3 text-deep-foreground backdrop-blur z-20">
+            <div className="flex items-center justify-between text-[11px]">
+              <span className="flex items-center gap-1">
+                <Activity className="h-3 w-3" /> Farm insights
+              </span>
+              <span className="text-leaf">Day 24</span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-deep-foreground/20">
+              <div className="h-full w-2/3 rounded-full bg-leaf" />
+            </div>
+            <p className="text-[10px] opacity-80">Growth progress · 66%</p>
+          </div>
         </div>
-        <div className="absolute inset-x-3 bottom-4 space-y-2 rounded-2xl bg-deep/70 p-3 text-deep-foreground backdrop-blur">
-          <div className="flex items-center justify-between text-[11px]">
-            <span className="flex items-center gap-1"><Activity className="h-3 w-3" /> Farm insights</span>
-            <span className="text-leaf">Day 24</span>
-          </div>
-          <div className="h-1.5 overflow-hidden rounded-full bg-deep-foreground/20">
-            <div className="h-full w-2/3 rounded-full bg-leaf" />
-          </div>
-          <p className="text-[10px] opacity-80">Growth progress · 66%</p>
+
+        {/* 2. 3D Pop-Out Foreground Plant Layer — extends OVER the top bezel */}
+        <div className="pointer-events-none absolute inset-x-0 -top-16 sm:-top-20 h-[calc(100%+4rem)] sm:h-[calc(100%+5rem)] w-full z-20">
+          <img
+            src={plantPopout}
+            alt=""
+            aria-hidden="true"
+            width={768}
+            height={1536}
+            className="h-full w-full object-cover animate-plant-emerge drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
+          />
         </div>
       </div>
     </div>
@@ -79,9 +115,22 @@ function HeroButton({ icon, label, main, onClick, href }: { icon: React.ReactNod
 }
 
 function Hero() {
-  const toDownloads = () => document.getElementById("downloads")?.scrollIntoView({ behavior: "smooth" });
-  const left = <HeroButton icon={<Smartphone className="h-7 w-7 text-leaf" />} label="GET THE ANDROID APP" main="Download Demo APK" onClick={toDownloads} />;
-  const right = <HeroButton icon={<FolderOpen className="h-7 w-7 text-primary" />} label="EXPLORE THE PROJECT" main="View Demo on Drive" href={appLinks.demoDriveUrl} />;
+  const left = (
+    <HeroButton
+      icon={<Smartphone className="h-7 w-7 text-leaf" />}
+      label="GET THE ANDROID APP"
+      main="Final apk V1.0"
+      href={appLinks.productionApkUrl}
+    />
+  );
+  const right = (
+    <HeroButton
+      icon={<FolderOpen className="h-7 w-7 text-primary" />}
+      label="EXPLORE THE PROJECT"
+      main="Final full Demo"
+      href={appLinks.finalDemoUrl}
+    />
+  );
   return (
     <section className="relative overflow-hidden">
       <InteractiveHeroGrid />
@@ -95,7 +144,7 @@ function Hero() {
         </p>
         <div className="relative mt-12 grid items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
           <div className="hidden justify-end md:flex">{left}</div>
-          <div className="relative">
+          <div className="relative pt-6 sm:pt-8">
             <Leaf className="absolute -left-10 top-20 h-10 w-10 -rotate-12 text-leaf/30" />
             <Leaf className="absolute -right-8 top-48 h-8 w-8 rotate-45 text-leaf/30" />
             <Phone />
@@ -194,10 +243,25 @@ function Downloads() {
             </div>
             <h3 className="mt-6 text-2xl font-bold">TeraFarm Production</h3>
             <p className="text-sm opacity-75">The next chapter of smarter farming. · {appLinks.productionVersion}</p>
-            <p className="mt-4 flex-1 text-sm leading-relaxed opacity-90">An upgraded TeraFarm experience with a refined UI, improved usability, expanded features, and a more complete farming workflow. We're working on bringing the next version to life.</p>
+            <p className="mt-4 flex-1 text-sm leading-relaxed opacity-90">An upgraded TeraFarm experience with a refined UI, improved usability, expanded features, and a more complete farming workflow.</p>
             <div className="mt-6 space-y-3">
               {ready ? (
-                <a href={appLinks.productionApkUrl} download target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-primary-foreground px-6 py-3 text-sm font-semibold text-primary transition hover:-translate-y-0.5">↓ Download Production APK</a>
+                <>
+                  <a
+                    href={appLinks.productionApkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-primary-foreground px-6 py-3 text-sm font-semibold text-primary transition hover:-translate-y-0.5"
+                  >
+                    ↓ Download Production APK
+                  </a>
+                  <ExternalLink
+                    href={appLinks.productionApkUrl}
+                    className="inline-block text-sm font-medium text-primary-foreground/90 underline-offset-4 hover:underline transition-colors duration-200"
+                  >
+                    View production files on Google Drive ↗
+                  </ExternalLink>
+                </>
               ) : (
                 <>
                   <button disabled className="cursor-not-allowed rounded-full bg-primary-foreground/15 px-6 py-3 text-sm font-semibold opacity-80">Coming Soon</button>
